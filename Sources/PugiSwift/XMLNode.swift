@@ -8,9 +8,9 @@
 import Foundation
 import pugixml
 
-public struct XMLNode: Sendable {
+public struct XMLNode {
     
-    private let node: pugi.xml_node
+    private var node: pugi.xml_node
     
     internal init(node: pugi.xml_node) {
         self.node = node
@@ -144,7 +144,7 @@ public struct XMLNode: Sendable {
         return .init(node: ptr)
     }
     
-    public struct Iterator: Sendable, IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         
         private var it: pugi.xml_node_iterator
         private let node: XMLNode
@@ -192,9 +192,21 @@ public struct XMLNode: Sendable {
     public func iterateAttributes() -> XMLAttribute.Iterator {
         .init(node: self)
     }
-  
-}
- 
-extension pugi.xml_node: Copyable {
     
+    public func root() -> XMLNode? {
+        let ptr = node.root()
+        if ptr.empty() {
+            return nil
+        }
+        return .init(node: ptr)
+    }
+    
+    @discardableResult public mutating func set(name: String) -> Bool {
+        node.set_name(name)
+    }
+    
+    @discardableResult public mutating func set(value: String) -> Bool {
+        node.set_value(value)
+    }
+  
 }

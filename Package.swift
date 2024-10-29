@@ -23,14 +23,21 @@ let package = Package(
                 .interoperabilityMode(.Cxx),
                 .swiftLanguageMode(.v6),
                 .unsafeFlags([
-                    "-Xcc", "-std=c++20"
+                    "-Xcc", "-std=c++11"
                 ])
             ]),
         .target(
             name: "pugixml"),
         .testTarget(
             name: "PugiSwiftTests",
-            dependencies: ["PugiSwift"]
-        ),
+            dependencies: ["PugiSwift"],
+            swiftSettings: [
+                .interoperabilityMode(.Cxx),
+                .swiftLanguageMode(.v6),
+                .unsafeFlags([
+                    "-Xcc", "-std=c++11"
+                ])
+            ]
+        )
     ]
 )

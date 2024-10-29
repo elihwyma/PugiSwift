@@ -8,9 +8,9 @@
 import Foundation
 import pugixml
 
-public struct XMLAttribute: Sendable {
+public struct XMLAttribute {
     
-    private let attribute: pugi.xml_attribute
+    private var attribute: pugi.xml_attribute
     
     internal init(attribute: pugi.xml_attribute) {
         self.attribute = attribute
@@ -55,14 +55,6 @@ public struct XMLAttribute: Sendable {
         attribute.as_bool(def)
     }
     
-    public func as_llong(def: CLongLong = 0) -> CLongLong {
-        attribute.as_llong(def)
-    }
-    
-    public func as_ullong(def: CUnsignedLongLong = 0) -> CUnsignedLongLong {
-        attribute.as_ullong(def)
-    }
-    
     public func next() -> XMLAttribute? {
         let attr = attribute.next_attribute()
         if attr.empty() {
@@ -79,7 +71,7 @@ public struct XMLAttribute: Sendable {
         return .init(attribute: attr)
     }
     
-    public struct Iterator: Sendable, IteratorProtocol {
+    public struct Iterator: IteratorProtocol {
         
         private var it: pugi.xml_attribute_iterator
         private let node: XMLNode
@@ -102,6 +94,14 @@ public struct XMLAttribute: Sendable {
             }
         }
      
+    }
+    
+    @discardableResult public mutating func set(name: String) -> Bool {
+        attribute.set_name(name)
+    }
+    
+    @discardableResult public mutating func set(value: String) -> Bool {
+        attribute.set_value(value)
     }
     
 }
