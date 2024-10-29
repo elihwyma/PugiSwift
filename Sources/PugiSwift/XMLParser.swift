@@ -44,4 +44,6 @@ public struct XMLDocument: ~Copyable {
         self.document = doc
     }
     
+    
+    
 }
