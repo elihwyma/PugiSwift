@@ -77,3 +77,16 @@ let package = Package(
         )
     ]
 )
+
+#if canImport(PackageConfig)
+import PackageConfig
+
+let metadata = PackageConfiguration([
+  "description": "Swifty wrapper for pugixml",
+  "authors": [
+    ["name": "Amelia While",
+     "email": "me@anamy.gay" ]
+  ]
+]).write()
+
+#endif
