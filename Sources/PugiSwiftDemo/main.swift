@@ -16,6 +16,7 @@ import PugiSwift
 @Node struct Record {
     let name: String
     let list: Int
+    let color: Colours
 }
 
 let str =
@@ -25,13 +26,23 @@ let str =
     <record>
         <name>Paul Koch</name>
         <list>17</list>
+        <color>red</color>
     </record>
     <record>
         <name>John Appleseed</name>
         <list>423</list>
+        <color>green</color>
     </record>
 </records> 
 """
+
+@Node enum Colours: String {
+    
+    case red = "red"
+    case green = "green"
+    case blue = "blue"
+    
+}
 
 do {
     let records = try Records(from: str)

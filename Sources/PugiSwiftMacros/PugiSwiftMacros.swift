@@ -190,15 +190,7 @@ public struct NodeMacro: ExtensionMacro {
         }
     }
     
-    public static func expansion(of node: SwiftSyntax.AttributeSyntax,
-                                 attachedTo declaration: some SwiftSyntax.DeclGroupSyntax,
-                                 providingExtensionsOf type: some SwiftSyntax.TypeSyntaxProtocol,
-                                 conformingTo protocols: [SwiftSyntax.TypeSyntax],
-                                 in context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
-        // Validate its a struct we're working with
-        guard let structDecl = Struct(declaration) else {
-            throw MacroError("@Node can only be applied to structs")
-        }
+    private static func structExpansion(struct structDecl: Struct) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
         // Get the access level of the struct
         let modifier = structDecl.accessLevel
         // Create the extension syntax
@@ -212,6 +204,45 @@ public struct NodeMacro: ExtensionMacro {
         extensionDecl.memberBlock.members.append(memberBlockItemSyntax)
         
         return [extensionDecl]
+    }
+    
+    private static func enumExpansion(enum enumDecl: Enum) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
+        
+        var extensionDecl = try ExtensionDeclSyntax("extension \(raw: enumDecl.identifier): XMLDecodable {}")
+        guard let rawType = enumDecl.inheritedTypes.first?.normalizedDescription else {
+            throw MacroError("Enum must have a raw type.")
+        }
+        
+        var functionDecl = Self.createFunction(with: enumDecl.accessLevel,
+                                               name: "node",
+                                               type: "PugiSwift.XMLNode")
+    
+        let syntax = CodeBlockItemSyntax(
+        """
+        let rawValue = try \(raw: rawType).init(from: node)
+        guard let enumType = \(raw: enumDecl.identifier).init(rawValue: rawValue) else {
+            throw .invalidCase
+        }
+        self = enumType
+        """
+        )
+        functionDecl.body = CodeBlockSyntax(statements: CodeBlockItemListSyntax([syntax]))
+        let memberBlockItemSyntax = MemberBlockItemSyntax(decl: functionDecl)
+        extensionDecl.memberBlock.members.append(memberBlockItemSyntax)
+        return [extensionDecl]
+    }
+    
+    public static func expansion(of node: SwiftSyntax.AttributeSyntax,
+                                 attachedTo declaration: some SwiftSyntax.DeclGroupSyntax,
+                                 providingExtensionsOf type: some SwiftSyntax.TypeSyntaxProtocol,
+                                 conformingTo protocols: [SwiftSyntax.TypeSyntax],
+                                 in context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
+        if let structDecl = Struct(declaration) {
+            return try Self.structExpansion(struct: structDecl)
+        } else if let enumDecl = Enum(declaration) {
+            return try Self.enumExpansion(enum: enumDecl)
+        }
+        throw MacroError("@Node applied to invalid type")
     }
     
 }
