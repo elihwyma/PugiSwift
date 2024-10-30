@@ -75,16 +75,13 @@ public struct NodeMacro: ExtensionMacro {
         // TODO: Check that every requested type will eventually conform. This is more difficult than it sounds.
         
         let nodeHelperName = "_\(propertyName)"
-        
-        NSLog("[PugiSwift] < \(property.attributes.first?.attribute?._syntax.attributeName.trimmedDescription) >")
-        
+     
         let xmlAttribute = property.attributes.first(where: { $0.attribute?._syntax.attributeName.trimmedDescription == "Attribute" })
         let xmlProperty = property.attributes.first(where: { $0.attribute?._syntax.attributeName.trimmedDescription == "Element" })
         if xmlAttribute != nil && xmlProperty != nil {
             throw MacroError("Property cannot both be an attribute and an element")
         }
-        
-        NSLog("[PugiSwift] Attr: \(xmlAttribute), Element: \(xmlProperty)")
+
         var codingKey = propertyName
         var childrenCodingKey: String? = nil
         var attribute = false
@@ -101,7 +98,6 @@ public struct NodeMacro: ExtensionMacro {
         }
         if let xmlAttribute {
             attribute = true
-            NSLog("[PugiSwift] Set attribute to true")
             let expressions = xmlAttribute.attribute?.asMacroAttribute?.arguments ?? []
             if let _codingKey = expressions.first(where: { $0.label == "codingKey" }) {
                 codingKey = _codingKey.expr.asStringLiteral!.value!
