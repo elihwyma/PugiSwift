@@ -1,4 +1,7 @@
 # PugiSwift
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Felihwyma%2FPugiSwift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/elihwyma/PugiSwift)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Felihwyma%2FPugiSwift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/elihwyma/PugiSwift)
+
 
 PugiSwift is a Swift wrapper around the C++ library [pugixml](https://github.com/zeux/pugixml). The aim is to provide a fast way to parse XML with Swift on both Apple platforms and on the server with Vapor.
 
