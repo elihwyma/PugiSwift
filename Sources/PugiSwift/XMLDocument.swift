@@ -1,10 +1,12 @@
 import Foundation
 import pugixml
 
-public final class XMLDocument: XMLNode {
+public final actor XMLDocument {
     
     private var document = pugi.xml_document()
-   
+    
+    internal let node: pugi.xml_node
+
     public init(data: Data) throws(XMLError) {
         var ptr: UnsafeRawBufferPointer!
         data.withUnsafeBytes { _ptr in
@@ -15,7 +17,7 @@ public final class XMLDocument: XMLNode {
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
-        super.init(node: document.root())
+        node = document.root()
     }
     
     public init(url: URL) throws(XMLError) {
@@ -27,7 +29,7 @@ public final class XMLDocument: XMLNode {
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
-        super.init(node: document.root())
+        node = document.root()
     }
     
     public init(string: String) throws(XMLError) {
@@ -35,8 +37,11 @@ public final class XMLDocument: XMLNode {
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
-        super.init(node: document.root())
+        node = document.root()
     }
   
 }
 
+extension XMLDocument: _XMLNodeProtocol {
+    
+}

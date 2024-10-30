@@ -32,7 +32,7 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
     public var localizedDescription: String {
         switch self {
         case .failedToDecode(xmlError: let xmlError):
-            "Failed to decode"
+            "Failed to decode: \(xmlError.description)"
         case .invalidRootNode:
             "Invalid Root Node"
         case .keyNotFound(codingKey: let codingKey):

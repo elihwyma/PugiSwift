@@ -26,6 +26,10 @@ let str =
         <name>Paul Koch</name>
         <list>17</list>
     </record>
+    <record>
+        <name>John Appleseed</name>
+        <list>423</list>
+    </record>
 </records> 
 """
 
