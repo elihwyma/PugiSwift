@@ -23,6 +23,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
     
     case couldNotGetName
     
+    case failedToParseURL(string: String)
+    
     public var description: String {
         localizedDescription
     }
@@ -43,6 +45,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
             "Not Implemented"
         case .couldNotGetName:
             "Could not get name"
+        case .failedToParseURL(string: let string):
+            "Failed to parse into URL: \(string)"
         }
     }
     
