@@ -1,19 +1,21 @@
 import Foundation
 import pugixml
 
-public final class XMLDocument {
+public final class XMLDocument: XMLNode {
     
     private var document = pugi.xml_document()
    
     public init(data: Data) throws(XMLError) {
-        var err: pugi.xml_parse_result = .init()
-        data.withUnsafeBytes { ptr in
-            err = document.load_buffer(ptr.baseAddress!,
-                                  data.count)
+        var ptr: UnsafeRawBufferPointer!
+        data.withUnsafeBytes { _ptr in
+            ptr = _ptr
         }
+        let err = document.load_buffer(ptr.baseAddress!,
+                                       data.count)
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
+        super.init(node: document.root())
     }
     
     public init(url: URL) throws(XMLError) {
@@ -25,6 +27,7 @@ public final class XMLDocument {
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
+        super.init(node: document.root())
     }
     
     public init(string: String) throws(XMLError) {
@@ -32,6 +35,7 @@ public final class XMLDocument {
         if err.status != pugi.status_ok {
             throw .init(status: err.status)
         }
+        super.init(node: document.root())
     }
   
 }

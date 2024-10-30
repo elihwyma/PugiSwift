@@ -8,7 +8,7 @@
 import Foundation
 import pugixml
 
-public struct XMLAttribute {
+public struct XMLAttribute: Sendable, AttributeProtocol {
     
     private var attribute: pugi.xml_attribute
     
@@ -16,14 +16,22 @@ public struct XMLAttribute {
         self.attribute = attribute
     }
     
-    public var name: String {
+    public var name: String? {
         let ptr = attribute.name()!
-        return String(cString: ptr)
+        let str = String(cString: ptr)
+        if str.isEmpty {
+            return nil
+        }
+        return str
     }
     
-    public var value: String {
+    public var value: String? {
         let ptr = attribute.value()!
-        return String(cString: ptr)
+        let str = String(cString: ptr)
+        if str.isEmpty {
+            return nil
+        }
+        return str
     }
     
     public var empty: Bool {
@@ -35,8 +43,8 @@ public struct XMLAttribute {
         return String(cString: ptr)
     }
     
-    public func as_int(def: Int32 = 0) -> Int32 {
-        attribute.as_int(def)
+    public func as_int(def: Int = 0) -> Int {
+        Int(attribute.as_int(Int32(def)))
     }
     
     public func as_uint(def: UInt32 = 0) -> UInt32 {
@@ -71,7 +79,7 @@ public struct XMLAttribute {
         return .init(attribute: attr)
     }
     
-    public struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol, Sequence {
         
         private var it: pugi.xml_attribute_iterator
         private let node: XMLNode

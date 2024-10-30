@@ -8,7 +8,7 @@
 import Foundation
 import pugixml
 
-public struct XMLNode {
+public class XMLNode {
     
     private var node: pugi.xml_node
     
@@ -16,14 +16,22 @@ public struct XMLNode {
         self.node = node
     }
     
-    public var name: String {
+    public var name: String? {
         let ptr = node.name()!
-        return String(cString: ptr)
+        let str = String(cString: ptr)
+        if str.isEmpty {
+            return nil
+        }
+        return str
     }
     
-    public var value: String {
+    public var value: String? {
         let ptr = node.value()!
-        return String(cString: ptr)
+        let str = String(cString: ptr)
+        if str.isEmpty {
+            return nil
+        }
+        return str
     }
     
     public var empty: Bool {
@@ -144,7 +152,7 @@ public struct XMLNode {
         return .init(node: ptr)
     }
     
-    public struct Iterator: IteratorProtocol {
+    public struct Iterator: IteratorProtocol, Sequence {
         
         private var it: pugi.xml_node_iterator
         private let node: XMLNode
@@ -201,12 +209,20 @@ public struct XMLNode {
         return .init(node: ptr)
     }
     
-    @discardableResult public mutating func set(name: String) -> Bool {
+    @discardableResult public func set(name: String) -> Bool {
         node.set_name(name)
     }
     
-    @discardableResult public mutating func set(value: String) -> Bool {
+    @discardableResult public func set(value: String) -> Bool {
         node.set_value(value)
+    }
+    
+    public func text() -> XMLText? {
+        let ptr = node.text()
+        if ptr.empty() {
+            return nil
+        }
+        return .init(text: ptr)
     }
   
 }
