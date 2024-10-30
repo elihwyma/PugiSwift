@@ -31,6 +31,7 @@ let str =
 
 do {
     let records = try Records(from: str)
+    print(records)
 } catch {
     print("Error: \(error.localizedDescription)")
 }

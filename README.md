@@ -5,3 +5,39 @@ PugiSwift is a Swift wrapper around the C++ library [pugixml](https://github.com
 The current version of pugixml bundled is [1.14](https://github.com/zeux/pugixml/releases/tag/v1.14).
 
 pugixml is licensed under the MIT license and a copy can be found [here](Sources/pugixml/LICENSE.md).
+
+## Example Usage
+
+```swift
+import Foundation
+import PugiSwift
+
+@Node struct Records {
+    @Attribute let value: String
+    @Element(childrenCodingKey: "record") let records: [Record]
+}
+
+@Node struct Record {
+    let name: String
+    let list: Int
+}
+
+let str =
+"""
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<records value="Hello World">
+    <record>
+        <name>Paul Koch</name>
+        <list>17</list>
+    </record>
+</records> 
+"""
+
+do {
+    let records = try Records(from: str)
+    print(records)
+} catch {
+    print("Error: \(error.localizedDescription)")
+}
+```
+
