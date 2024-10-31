@@ -13,6 +13,14 @@ import PugiSwift
     @Element(childrenCodingKey: "record") let records: [Record]
 }
 
+@Restriction struct ExampleSimpleType: NumericRestrictions {
+    
+    var rawValue: Int {
+        5
+    }
+    
+}
+
 @Node struct Record {
     let name: String
     let list: Int

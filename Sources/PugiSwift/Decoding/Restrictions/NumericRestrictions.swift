@@ -9,33 +9,37 @@ import Foundation
 
 public protocol NumericRestrictions: RestrictionsProtocol {
     
-    static var maxExclusive: Int { get }
+    associatedtype T: Numeric
     
-    static var maxInclusive: Int { get }
+    static var maxExclusive: T { get }
     
-    static var minExclusive: Int { get }
+    static var maxInclusive: T { get }
     
-    static var minInclusive: Int { get }
+    static var minExclusive: T { get }
+    
+    static var minInclusive: T { get }
     
     static var totalDigits: Int { get }
+    
+    var rawValue: T { get }
     
 }
 
 extension NumericRestrictions {
     
-    public static var maxExclusive: Int {
+    public static var maxExclusive: T {
         0
     }
     
-    public static var maxInclusive: Int {
+    public static var maxInclusive: T {
         0
     }
     
-    public static var minExclusive: Int {
+    public static var minExclusive: T {
         0
     }
     
-    public static var minInclusive: Int {
+    public static var minInclusive: T {
         0
     }
     

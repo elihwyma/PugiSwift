@@ -7,41 +7,45 @@
 
 import Foundation
 
-public protocol DoubleRestrictions: RestrictionsProtocol {
+public protocol FloatingRestrictions: RestrictionsProtocol {
+    
+    associatedtype T: FloatingPoint
     
     static var fractionDigits: Int { get }
     
-    static var maxExclusive: Int { get }
+    static var maxExclusive: T { get }
     
-    static var maxInclusive: Int { get }
+    static var maxInclusive: T { get }
     
-    static var minExclusive: Int { get }
+    static var minExclusive: T { get }
     
-    static var minInclusive: Int { get }
+    static var minInclusive: T { get }
     
     static var totalDigits: Int { get }
     
+    var rawValue: T { get }
+    
 }
 
-extension DoubleRestrictions {
+extension FloatingRestrictions {
     
     public static var fractionDigits: Int {
         0
     }
     
-    public static var maxExclusive: Int {
+    public static var maxExclusive: T {
         0
     }
     
-    public static var maxInclusive: Int {
+    public static var maxInclusive: T {
         0
     }
     
-    public static var minExclusive: Int {
+    public static var minExclusive: T {
         0
     }
     
-    public static var minInclusive: Int {
+    public static var minInclusive: T {
         0
     }
     

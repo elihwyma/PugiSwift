@@ -19,3 +19,9 @@ public macro Node(codingKey: String? = nil) =
     #externalMacro(module: "PugiSwiftMacros",
                    type: "NodeMacro")
 
+@attached(extension,
+          names: arbitrary)
+public macro Restriction(codingKey: String? = nil) =
+    #externalMacro(module: "PugiSwiftMacros",
+                   type: "RestrictionMacro")
+

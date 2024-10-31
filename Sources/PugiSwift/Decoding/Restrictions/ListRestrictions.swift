@@ -13,6 +13,8 @@ public protocol ListRestrictions: RestrictionsProtocol {
     
     static var minLength: Int { get }
     
+    static var rawValue: any Collection { get }
+    
 }
 
 extension ListRestrictions {
