@@ -10,9 +10,7 @@ import Foundation
 public protocol FloatingRestrictions: RestrictionsProtocol {
     
     associatedtype T: FloatingPoint
-    
-    static var fractionDigits: Int { get }
-    
+
     static var maxExclusive: T { get }
     
     static var maxInclusive: T { get }
@@ -21,17 +19,11 @@ public protocol FloatingRestrictions: RestrictionsProtocol {
     
     static var minInclusive: T { get }
     
-    static var totalDigits: Int { get }
-    
     var rawValue: T { get }
     
 }
 
 extension FloatingRestrictions {
-    
-    public static var fractionDigits: Int {
-        0
-    }
     
     public static var maxExclusive: T {
         0
@@ -46,10 +38,6 @@ extension FloatingRestrictions {
     }
     
     public static var minInclusive: T {
-        0
-    }
-    
-    public static var totalDigits: Int {
         0
     }
     

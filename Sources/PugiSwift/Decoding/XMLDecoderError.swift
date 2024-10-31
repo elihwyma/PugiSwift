@@ -27,6 +27,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
     
     case invalidCase
     
+    case restrictionError(error: RestrictionsError)
+    
     public var description: String {
         localizedDescription
     }
@@ -51,6 +53,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
             "Failed to parse into URL: \(string)"
         case .invalidCase:
             "Enum case not found"
+        case .restrictionError(error: let error):
+            "Error validating restrictions: \(error.errorDescription)"
         }
     }
     

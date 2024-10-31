@@ -13,11 +13,23 @@ import PugiSwift
     @Element(childrenCodingKey: "record") let records: [Record]
 }
 
-@Restriction struct ExampleSimpleType: NumericRestrictions {
+@Restriction struct ExampleIntType: NumericRestrictions {
     
-    var rawValue: Int {
-        5
-    }
+    static let maxExclusive = 5
+    
+    static let minExclusive = 3
+    
+    let rawValue: Int
+    
+}
+
+@Restriction struct ExampleDoubleType: FloatingRestrictions {
+    
+    static let maxExclusive = 5.0
+    
+    static let minInclusive = 3.0
+    
+    let rawValue: Double
     
 }
 
@@ -25,6 +37,14 @@ import PugiSwift
     let name: String
     let list: Int
     let color: Colours
+}
+
+@Node enum Colours: String {
+    
+    case red = "red"
+    case green = "green"
+    case blue = "blue"
+    
 }
 
 let str =
@@ -43,14 +63,6 @@ let str =
     </record>
 </records> 
 """
-
-@Node enum Colours: String {
-    
-    case red = "red"
-    case green = "green"
-    case blue = "blue"
-    
-}
 
 do {
     let records = try Records(from: str)

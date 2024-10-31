@@ -13,7 +13,7 @@ import MacroToolkit
 
 public struct NodeMacro: ExtensionMacro {
     
-    private static func createFunction(with access: AccessModifier?, name: String, type: String) -> InitializerDeclSyntax {
+    internal static func createFunction(with access: AccessModifier?, name: String, type: String) -> InitializerDeclSyntax {
         let functionParameter = FunctionParameter(label: "from",
                                                   name: name,
                                                   type: "\(raw: type)")
