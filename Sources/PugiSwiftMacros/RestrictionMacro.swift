@@ -96,6 +96,38 @@ public struct RestrictionMacro: ExtensionMacro {
         return ret
     }
     
+    private static func genericList(for structDecl: Struct) -> [CodeBlockItemSyntax] {
+        var ret = [CodeBlockItemSyntax]()
+        if Self.contains(variable: "minLength", structDecl) {
+            ret.append(
+            """
+            if rawValue.count < minLength {
+                throw .restrictionError(error: ListRestrictionError.minLength)
+            }
+            """
+            )
+        }
+        if Self.contains(variable: "maxLength", structDecl) {
+            ret.append(
+            """
+            if rawValue.count > maxLength {
+                throw .restrictionError(error: ListRestrictionError.maxLength)
+            }
+            """
+            )
+        }
+        if Self.contains(variable: "length", structDecl) {
+            ret.append(
+            """
+            if rawValue.count != length {
+                throw .restrictionError(error: ListRestrictionError.length)
+            }
+            """
+            )
+        }
+        return ret
+    }
+    
     private static func numericRestrictions(for structDecl: Struct) throws -> [CodeBlockItemSyntax] {
         return genericNumeric(for: structDecl)
     }
@@ -105,11 +137,23 @@ public struct RestrictionMacro: ExtensionMacro {
     }
     
     private static func stringRestrictions(for structDecl: Struct) throws -> [CodeBlockItemSyntax] {
-        return []
+        var genericList = Self.genericList(for: structDecl)
+        if Self.contains(variable: "pattern", structDecl) {
+            genericList.append(
+            """
+            if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, macCatalyst 16.0, visionOS 1.0, *) {
+                if (try? Self.pattern.wholeMatch(in: rawValue)) == nil {
+                    throw .restrictionError(error: StringRestrictionsError.pattern)
+                }
+            }
+            """
+            )
+        }
+        return genericList
     }
     
     private static func listRestrictions(for structDecl: Struct) throws -> [CodeBlockItemSyntax] {
-        return []
+        return genericList(for: structDecl)
     }
     
     public static func expansion(of node: SwiftSyntax.AttributeSyntax,

@@ -13,6 +13,8 @@ public protocol ListRestrictions: RestrictionsProtocol {
     
     static var minLength: Int { get }
     
+    static var maxLength: Int { get }
+    
     static var rawValue: any Collection { get }
     
 }
@@ -20,6 +22,10 @@ public protocol ListRestrictions: RestrictionsProtocol {
 extension ListRestrictions {
     
     public static var minLength: Int {
+        0
+    }
+    
+    public static var maxLength: Int {
         0
     }
     

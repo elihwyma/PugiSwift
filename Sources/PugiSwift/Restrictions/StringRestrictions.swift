@@ -16,7 +16,9 @@ public protocol StringRestrictions: RestrictionsProtocol {
     
     static var minLength: Int { get }
     
-    static var rawValue: String { get }
+    static var maxLength: Int { get }
+    
+    var rawValue: String { get }
     
 }
 
@@ -28,6 +30,10 @@ extension StringRestrictions {
     }
     
     public static var minLength: Int {
+        0
+    }
+    
+    public static var maxLength: Int {
         0
     }
     

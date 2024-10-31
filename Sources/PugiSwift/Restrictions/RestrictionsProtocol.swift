@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol RestrictionsProtocol: Sendable {
+public protocol RestrictionsProtocol {
     
     func validateRestrictions() throws(XMLDecoderError)
     

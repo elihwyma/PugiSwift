@@ -33,6 +33,15 @@ import PugiSwift
     
 }
 
+@Restriction struct ExampleStringType: StringRestrictions {
+    
+    @available(macOS 13.0, *)
+    nonisolated(unsafe) static let pattern = try! Regex("[0-9][A-Z][0-9][0-9]")
+    
+    let rawValue: String
+    
+}
+
 @Node struct Record {
     let name: String
     let list: Int
