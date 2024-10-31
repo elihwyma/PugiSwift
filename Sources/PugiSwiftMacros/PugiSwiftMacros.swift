@@ -216,7 +216,6 @@ public struct NodeMacro: ExtensionMacro {
         var functionDecl = Self.createFunction(with: enumDecl.accessLevel,
                                                name: "node",
                                                type: "PugiSwift.XMLNode")
-    
         let syntax = CodeBlockItemSyntax(
         """
         let rawValue = try \(raw: rawType).init(from: node)

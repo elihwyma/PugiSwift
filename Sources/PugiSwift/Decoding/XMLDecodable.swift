@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol XMLDecodable {
+public protocol XMLDecodable: Sendable {
     
     init(from string: String) throws(XMLDecoderError)
     

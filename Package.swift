@@ -19,7 +19,8 @@ let package = Package(
         .library(
             name: "PugiSwift",
             targets: ["PugiSwift"]),
-        .executable(name: "PugiSwiftDemo", targets: ["PugiSwiftDemo"])
+        .executable(name: "PugiSwiftDemo",
+                    targets: ["PugiSwiftDemo"])
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),

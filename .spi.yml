@@ -2,4 +2,15 @@ version: 1
 builder:
   configs:
     - documentation_targets: [PugiSwift]
-
+    - platform: watchos
+      scheme: PugiSwift
+    - platform: ios
+      scheme: PugiSwift
+    - platform: tvos
+      scheme: PugiSwift
+    - platform: visionos
+      scheme: PugiSwift
+    - platform: linux
+      scheme: PugiSwift
+    - platform: macos
+      scheme: PugiSwift
