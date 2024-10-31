@@ -9,6 +9,16 @@ The current version of pugixml bundled is [1.14](https://github.com/zeux/pugixml
 
 pugixml is licensed under the MIT license and a copy can be found [here](Sources/pugixml/LICENSE.md).
 
+## Benchmarking
+PugiSwift has been benchmarked among other popular alterative Swift packages. The code for this benchmark is available [in this repo](https://github.com/elihwyma/PugiSwiftComparisons). The test was in Release mode with the debugger turned off. Comparisons were made against [Fuzi](https://github.com/cezheng/Fuzi.git) and [XMLCoder](https://github.com/CoreOffice/XMLCoder.git).
+
+```mermaid
+xychart-beta
+    title "Parses per second of 212kb file"
+    x-axis "Programs" ["PugiSwift", "Fuzi", "XMLCoder"]
+    bar [757, 207, 54]
+```
+
 ## Example Usage
 
 ```swift
