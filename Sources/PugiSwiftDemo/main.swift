@@ -35,7 +35,7 @@ import PugiSwift
 
 @Restriction struct ExampleStringType: StringRestrictions {
     
-    @available(macOS 13.0, *)
+    @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, macCatalyst 16.0, *)
     nonisolated(unsafe) static let pattern = try! Regex("[0-9][A-Z][0-9][0-9]")
     
     let rawValue: String
