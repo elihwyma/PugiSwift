@@ -110,7 +110,7 @@ public struct NodeMacro: ExtensionMacro {
                     guard let wrappedArry = ArrayTypeSyntax(optionalArrayType._baseSyntax.wrappedType) else {
                         throw MacroError("\(propertyName) must be an array")
                     }
-                    let elementType = wrappedArry.elementType.description
+                    let elementType = wrappedArry.element.description
                     let code = CodeBlockItemSyntax(
                     """
                     var _\(raw: nodeHelperName) = [\(raw: elementType)]()
@@ -196,22 +196,22 @@ public struct NodeMacro: ExtensionMacro {
         guard let rawType = enumDecl.inheritedTypes.first?.normalizedDescription else {
             throw MacroError("Enum must have a raw type.")
         }
-        
-        var functionDecl = Self.createFunction(with: enumDecl.accessLevel,
-                                               name: "node",
-                                               type: "PugiSwift.XMLNode")
-        let syntax = CodeBlockItemSyntax(
+        var functionDeclAttr = Self.createFunction(with: enumDecl.accessLevel,
+                                                   name: "attribute",
+                                                   type: "(any AttributeProtocol)?")
+        let syntaxAttribute = CodeBlockItemSyntax(
         """
-        let rawValue = try \(raw: rawType).init(from: node)
+        let rawValue = try \(raw: rawType).init(from: attribute)
         guard let enumType = \(raw: enumDecl.identifier).init(rawValue: rawValue) else {
             throw .invalidCase
         }
         self = enumType
         """
         )
-        functionDecl.body = CodeBlockSyntax(statements: CodeBlockItemListSyntax([syntax]))
-        let memberBlockItemSyntax = MemberBlockItemSyntax(decl: functionDecl)
-        extensionDecl.memberBlock.members.append(memberBlockItemSyntax)
+        functionDeclAttr.body = CodeBlockSyntax(statements: CodeBlockItemListSyntax([syntaxAttribute]))
+        let memberBlockItemSyntaxAttr = MemberBlockItemSyntax(decl: functionDeclAttr)
+        extensionDecl.memberBlock.members.append(memberBlockItemSyntaxAttr)
+         
         return [extensionDecl]
     }
     

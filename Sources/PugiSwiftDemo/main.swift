@@ -8,11 +8,6 @@
 import Foundation
 import PugiSwift
 
-@Node struct Records {
-    @Attribute let value: String
-    @Element(childrenCodingKey: "record") let records: [Record]
-}
-
 @Restriction struct ExampleIntType: NumericRestrictions {
     
     static let maxExclusive = 5
@@ -48,7 +43,7 @@ import PugiSwift
     let color: Colours
 }
 
-@Node struct OptionalRecord {
+@Node struct Records {
     @Attribute let value: String?
     @Element(childrenCodingKey: "record") let records: [Record]?
 }
@@ -58,7 +53,6 @@ import PugiSwift
     case red = "red"
     case green = "green"
     case blue = "blue"
-    
 }
 
 let str =
@@ -83,7 +77,7 @@ let str =
 """
 
 do {
-    let records = try OptionalRecord(from: str)
+    let records = try Records(from: str)
     print(records)
 } catch {
     print("Error: \(error.localizedDescription)")
