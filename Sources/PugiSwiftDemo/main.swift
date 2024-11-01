@@ -50,7 +50,7 @@ import PugiSwift
 
 @Node struct OptionalRecord {
     @Attribute let value: String?
-    @Element(childrenCodingKey: "record") let records: [Record?]
+    @Element(childrenCodingKey: "record") let records: [Record]?
 }
 
 @Node enum Colours: String {
