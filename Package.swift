@@ -19,8 +19,12 @@ let package = Package(
         .library(
             name: "PugiSwift",
             targets: ["PugiSwift"]),
-        .executable(name: "PugiSwiftDemo",
-                    targets: ["PugiSwiftDemo"])
+        .executable(
+            name: "PugiSwiftDemo",
+            targets: ["PugiSwiftDemo"]),
+        .executable(
+            name: "swiftxsd",
+            targets: ["swiftxsd"])
     ],
     dependencies: [
         .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),
@@ -31,6 +35,19 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .executableTarget(
             name: "PugiSwiftDemo",
+            dependencies: [
+                "PugiSwift"
+            ],
+            swiftSettings: [
+                .interoperabilityMode(.Cxx),
+                .swiftLanguageMode(.v6),
+                .unsafeFlags([
+                    "-Xcc", "-std=c++20"
+                ])
+            ]
+        ),
+        .executableTarget(
+            name: "swiftxsd",
             dependencies: [
                 "PugiSwift"
             ],

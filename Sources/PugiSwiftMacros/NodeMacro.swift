@@ -104,13 +104,16 @@ public struct NodeMacro: ExtensionMacro {
                 return [code]
             } else {
                 if let childrenCodingKey {
-                    guard case let .array(arrayType) = type else {
+                    guard case let .optional(optionalArrayType) = type else {
+                        throw MacroError("\(propertyName) optional error??")
+                    }
+                    guard let wrappedArry = ArrayTypeSyntax(optionalArrayType._baseSyntax.wrappedType) else {
                         throw MacroError("\(propertyName) must be an array")
                     }
-                    let elementType = arrayType._baseSyntax.element.description
+                    let elementType = wrappedArry.elementType.description
                     let code = CodeBlockItemSyntax(
                     """
-                    var _\(raw: nodeHelperName) = \(raw: type.description)()
+                    var _\(raw: nodeHelperName) = [\(raw: elementType)]()
                     for child in node.iterateNodes() {
                         if child.name != "\(raw: childrenCodingKey)" {
                             continue
@@ -127,7 +130,7 @@ public struct NodeMacro: ExtensionMacro {
                 } else {
                     let code = CodeBlockItemSyntax(
                     """
-                    if let \(raw: nodeHelperName) = node.child(name: \(raw: codingKey) {
+                    if let \(raw: nodeHelperName) = node.child(name: "\(raw: codingKey)") {
                         self.\(raw: propertyName) = try? .init(from: \(raw: nodeHelperName))
                     } else {
                         self.\(raw: propertyName) = nil

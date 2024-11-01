@@ -141,6 +141,7 @@ public struct RestrictionMacro: ExtensionMacro {
         if Self.contains(variable: "pattern", structDecl) {
             genericList.append(
             """
+            // On supported platforms this check is compiled out
             if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, macCatalyst 16.0, visionOS 1.0, *) {
                 if (try? Self.pattern.wholeMatch(in: rawValue)) == nil {
                     throw .restrictionError(error: StringRestrictionsError.pattern)

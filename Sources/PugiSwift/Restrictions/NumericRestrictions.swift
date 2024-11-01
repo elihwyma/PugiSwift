@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol NumericRestrictions: RestrictionsProtocol {
+public protocol NumericRestrictions: RestrictionsProtocol, RawRepresentable {
     
     associatedtype T: Numeric
     

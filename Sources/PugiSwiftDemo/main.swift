@@ -44,8 +44,13 @@ import PugiSwift
 
 @Node struct Record {
     let name: String
-    let list: Int
+    let list: Int?
     let color: Colours
+}
+
+@Node struct OptionalRecord {
+    @Attribute let value: String?
+    @Element(childrenCodingKey: "record") let records: [Record?]
 }
 
 @Node enum Colours: String {
@@ -70,11 +75,15 @@ let str =
         <list>423</list>
         <color>green</color>
     </record>
+    <record>
+        <name>John Appleseed</name>
+        <color>green</color>
+    </record>
 </records> 
 """
 
 do {
-    let records = try Records(from: str)
+    let records = try OptionalRecord(from: str)
     print(records)
 } catch {
     print("Error: \(error.localizedDescription)")
