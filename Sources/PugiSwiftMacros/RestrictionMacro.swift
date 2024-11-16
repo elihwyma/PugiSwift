@@ -87,7 +87,7 @@ public struct RestrictionMacro: ExtensionMacro {
         if Self.contains(variable: "totalDigits", structDecl) {
             ret.append(
             """
-            if rawValue.size != totalDigits {
+            if rawValue.size != Self.totalDigits {
                 throw .restrictionError(error: NumericRestrictionsError.totalDigits)
             }
             """
@@ -101,7 +101,7 @@ public struct RestrictionMacro: ExtensionMacro {
         if Self.contains(variable: "minLength", structDecl) {
             ret.append(
             """
-            if rawValue.count < minLength {
+            if rawValue.count < Self.minLength {
                 throw .restrictionError(error: ListRestrictionError.minLength)
             }
             """
@@ -110,7 +110,7 @@ public struct RestrictionMacro: ExtensionMacro {
         if Self.contains(variable: "maxLength", structDecl) {
             ret.append(
             """
-            if rawValue.count > maxLength {
+            if rawValue.count > Self.maxLength {
                 throw .restrictionError(error: ListRestrictionError.maxLength)
             }
             """
@@ -119,7 +119,7 @@ public struct RestrictionMacro: ExtensionMacro {
         if Self.contains(variable: "length", structDecl) {
             ret.append(
             """
-            if rawValue.count != length {
+            if rawValue.count != Self.length {
                 throw .restrictionError(error: ListRestrictionError.length)
             }
             """
