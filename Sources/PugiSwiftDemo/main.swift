@@ -20,6 +20,8 @@ import PugiSwift
 
 @Restriction struct ExampleDoubleType: FloatingRestrictions {
     
+    @Attribute let hello: String
+    
     static let maxExclusive = 5.0
     
     static let minInclusive = 3.0

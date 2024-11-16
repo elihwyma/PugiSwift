@@ -47,9 +47,12 @@ public struct NodeMacro: ExtensionMacro {
         return function
     }
     
-    private static func createBlockItem(for property: Property) throws -> [CodeBlockItemSyntax] {
+    internal static func createBlockItem(for property: Property, attributesOnly: Bool = false) throws -> [CodeBlockItemSyntax] {
         let propertyName = property.identifier
         guard let type = property.type else {
+            if attributesOnly {
+                return []
+            }
             throw MacroError("Unknown type for \(propertyName)")
         }
         
@@ -61,6 +64,9 @@ public struct NodeMacro: ExtensionMacro {
         let xmlProperty = property.attributes.first(where: { $0.attribute?._syntax.attributeName.trimmedDescription == "Element" })
         if xmlAttribute != nil && xmlProperty != nil {
             throw MacroError("Property cannot both be an attribute and an element")
+        }
+        if attributesOnly && xmlAttribute == nil {
+            return []
         }
 
         var codingKey = propertyName

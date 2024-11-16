@@ -189,7 +189,10 @@ public struct RestrictionMacro: ExtensionMacro {
         try self.validateRestrictions()
         """
         )
-        genericInitFunction.body = CodeBlockSyntax(statements: CodeBlockItemListSyntax([genericInitCode]))
+        
+        let defineProps = try structDecl.properties.map { try NodeMacro.createBlockItem(for: $0, attributesOnly: true) }.joined()
+        
+        genericInitFunction.body = CodeBlockSyntax(statements: CodeBlockItemListSyntax(defineProps + [genericInitCode]))
         let genericMemberBodySyntax = MemberBlockItemSyntax(decl: genericInitFunction)
         extensionDecl.memberBlock.members.append(genericMemberBodySyntax)
         
