@@ -8,13 +8,13 @@
 import Foundation
 import PugiSwift
 
-@Restriction struct ExampleIntType: NumericRestrictions {
+@Restriction public struct ExampleIntType: NumericRestrictions {
     
-    static let maxExclusive = 5
+    public static let maxExclusive = 5
     
-    static let minExclusive = 3
+    public static let minExclusive = 3
     
-    let rawValue: Int
+    public let rawValue: Int
     
 }
 
