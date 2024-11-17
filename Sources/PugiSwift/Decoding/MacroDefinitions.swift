@@ -19,10 +19,11 @@ public macro Node(codingKey: String? = nil) =
     #externalMacro(module: "PugiSwiftMacros",
                    type: "NodeMacro")
 
-@attached(extension,
-          conformances: XMLDecodable,
-          names: arbitrary)
-public macro Restriction(codingKey: String? = nil) =
+@attached(extension, conformances: XMLDecodable, names: arbitrary)
+public macro SimpleType(codingKey: String? = nil) =
     #externalMacro(module: "PugiSwiftMacros",
-                   type: "RestrictionMacro")
+                   type: "SimpleTypeMacro")
+
+@attached(extension, conformances: XMLDecodable, names: arbitrary)
+public macro ComplexExtension(codingKey: String? = nil) = #externalMacro(module: "PugiSwiftMacros", type: "ComplexExtensionMacro")
 

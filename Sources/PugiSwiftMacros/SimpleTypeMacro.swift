@@ -11,7 +11,7 @@ import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 import MacroToolkit
 
-public struct RestrictionMacro: ExtensionMacro {
+public struct SimpleTypeMacro: ExtensionMacro {
     
     internal static func createFunction(with access: AccessModifier?) -> FunctionDeclSyntax {
         let throwsClause = ThrowsClauseSyntax(throwsSpecifier: .keyword(.throws), leftParen: .leftParenToken(), type: .init(IdentifierTypeSyntax(name: "XMLDecoderError")), rightParen: .rightParenToken())
@@ -163,7 +163,7 @@ public struct RestrictionMacro: ExtensionMacro {
                                  conformingTo protocols: [SwiftSyntax.TypeSyntax],
                                  in context: some SwiftSyntaxMacros.MacroExpansionContext) throws -> [SwiftSyntax.ExtensionDeclSyntax] {
         guard let structDecl = Struct(declaration) else {
-            throw MacroError("@Restriction can only be allowed to a struct")
+            throw MacroError("@SimpleType can only be allowed to a struct")
         }
         let inheritedTypes = structDecl.inheritedTypes
         

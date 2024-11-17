@@ -8,7 +8,7 @@
 import Foundation
 import PugiSwift
 
-@Restriction public struct ExampleIntType: NumericRestrictions {
+@SimpleType public struct ExampleIntType: NumericRestrictions {
     
     public static let maxExclusive = 5
     
@@ -18,7 +18,7 @@ import PugiSwift
     
 }
 
-@Restriction struct ExampleDoubleType: FloatingRestrictions {
+@SimpleType struct ExampleDoubleType: FloatingRestrictions {
     
     @Attribute let hello: String
     
@@ -30,12 +30,20 @@ import PugiSwift
     
 }
 
-@Restriction struct ExampleStringType: StringRestrictions {
+@SimpleType struct ExampleStringType: StringRestrictions {
     
     @available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, macCatalyst 16.0, *)
     nonisolated(unsafe) static let pattern = try! Regex("[0-9][A-Z][0-9][0-9]")
     
     let rawValue: String
+    
+}
+
+@ComplexExtension struct ExampleExtendedType {
+    
+    @Attribute let helloWorld: Int
+    
+    let rawValue: ExampleStringType
     
 }
 

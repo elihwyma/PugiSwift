@@ -17,7 +17,8 @@ struct PugiSwiftMacrosPlugin: CompilerPlugin {
         AttributeMacro.self,
         ElementMacro.self,
         NodeMacro.self,
-        RestrictionMacro.self
+        SimpleTypeMacro.self,
+        ComplexExtensionMacro.self
     ]
     
 }
