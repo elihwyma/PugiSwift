@@ -29,6 +29,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
     
     case restrictionError(error: RestrictionsError)
     
+    case failedToParse(date: String)
+    
     public var description: String {
         localizedDescription
     }
@@ -55,6 +57,8 @@ public enum XMLDecoderError: Error, LocalizedError, CustomStringConvertible {
             "Enum case not found"
         case .restrictionError(error: let error):
             "Error validating restrictions: \(error.errorDescription)"
+        case .failedToParse(date: let date):
+            "Failed to parse date: \(date)"
         }
     }
     
