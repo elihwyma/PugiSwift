@@ -182,10 +182,10 @@ public struct SimpleTypeMacro: ExtensionMacro {
             throw MacroError("\(structDecl.identifier) must conform to one of the following protocols: NumericRestriction, FloatingRestrictions, StringRestrictions, ListRestrictions")
         }
         
-        var genericInitFunction = NodeMacro.createFunction(with: structDecl.accessLevel, name: "node", type: "PugiSwift.XMLNode")
+        var genericInitFunction = NodeMacro.createFunction(with: structDecl.accessLevel, name: "attribute", type: "PugiSwift.XMLAttribute")
         let genericInitCode = CodeBlockItemSyntax(
         """
-        self.rawValue = try .init(from: node)
+        self.rawValue = try .init(from: attribute)
         try self.validateRestrictions()
         """
         )
