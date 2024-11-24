@@ -9,12 +9,12 @@ import Foundation
 
 public enum StringRestrictionsError: RestrictionsError {
 
-    case pattern
+    case pattern(actual: String, identifier: String)
     
     public var description: String {
         switch self {
-        case .pattern:
-            return "The pattern of the string is not valid."
+        case .pattern(let actual, let identifier):
+            return "Expected string to match pattern but got \(actual) for \(identifier)"
         }
     }
     

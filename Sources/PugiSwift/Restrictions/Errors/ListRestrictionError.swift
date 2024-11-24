@@ -9,20 +9,20 @@ import Foundation
 
 public enum ListRestrictionError: RestrictionsError {
     
-    case length
+    case length(expected: Int, actual: Int, identifier: String)
     
-    case minLength
+    case minLength(expected: Int, actual: Int, identifier: String)
     
-    case maxLength
+    case maxLength(expected: Int, actual: Int, identifier: String)
 
     public var description: String {
         switch self {
-        case .length:
-            return "The length of the list is not valid."
-        case .minLength:
-            return "The minimum length of the list is not valid."
-        case .maxLength:
-            return "The maximum length of the list is not valid."
+        case .length(expected: let expected, actual: let actual, identifier: let identifier):
+            "Invalid Length for '\(identifier)', expected \(expected) but got \(actual)"
+        case .minLength(expected: let expected, actual: let actual, identifier: let identifier):
+            "Invalid Length for '\(identifier)', expected a minimum of \(expected) but got \(actual)"
+        case .maxLength(expected: let expected, actual: let actual, identifier: let identifier):
+            "Invalid Length for '\(identifier)', expected a maximum of \(expected) but got \(actual)"
         }
     }
     

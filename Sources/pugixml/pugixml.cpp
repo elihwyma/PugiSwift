@@ -5696,6 +5696,9 @@ namespace pugi
             if (iname && impl::strequal(name_, iname))
                 return xml_node(i);
             
+            if (!iname) {
+                continue;
+            }
             const char *colon = strchr(iname, ':');
             if (colon && strcmp(colon + 1, name_) == 0)
                 return xml_node(i);
@@ -5728,6 +5731,9 @@ namespace pugi
             if (iname && impl::strequal(name_, iname))
                 return xml_attribute(i);
             
+            if (!iname) {
+                continue;
+            }
             const char *colon = strchr(iname, ':');
             if (colon && strcmp(colon + 1, name_) == 0)
                 return xml_attribute(i);

@@ -51,8 +51,8 @@ public struct SimpleTypeMacro: ExtensionMacro {
         if Self.contains(variable: "maxExclusive", structDecl) {
             ret.append(
             """
-            if rawValue > Self.maxExclusive {
-                throw .restrictionError(error: NumericRestrictionsError.maxExclusive)
+            if rawValue >= Self.maxExclusive {
+                throw .restrictionError(error: NumericRestrictionsError.maxExclusive(expected: Self.maxExclusive, actual: rawValue, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -60,8 +60,8 @@ public struct SimpleTypeMacro: ExtensionMacro {
         if Self.contains(variable: "maxInclusive", structDecl) {
             ret.append(
             """
-            if rawValue >= Self.maxInclusive {
-                throw .restrictionError(error: NumericRestrictionsError.maxInclusive)
+            if rawValue > Self.maxInclusive {
+                throw .restrictionError(error: NumericRestrictionsError.maxInclusive(expected: Self.maxInclusive, actual: rawValue, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -69,8 +69,8 @@ public struct SimpleTypeMacro: ExtensionMacro {
         if Self.contains(variable: "minExclusive", structDecl) {
             ret.append(
             """
-            if rawValue < Self.minExclusive {
-                throw .restrictionError(error: NumericRestrictionsError.minExclusive)
+            if rawValue <= Self.minExclusive {
+                throw .restrictionError(error: NumericRestrictionsError.minExclusive(expected: Self.minExclusive, actual: rawValue, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -78,8 +78,8 @@ public struct SimpleTypeMacro: ExtensionMacro {
         if Self.contains(variable: "minInclusive", structDecl) {
             ret.append(
             """
-            if rawValue <= Self.maxInclusive {
-                throw .restrictionError(error: NumericRestrictionsError.minInclusive)
+            if rawValue < Self.maxInclusive {
+                throw .restrictionError(error: NumericRestrictionsError.minInclusive(expected: Self.minInclusive, actual: rawValue, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -88,7 +88,7 @@ public struct SimpleTypeMacro: ExtensionMacro {
             ret.append(
             """
             if rawValue.size != Self.totalDigits {
-                throw .restrictionError(error: NumericRestrictionsError.totalDigits)
+                throw .restrictionError(error: NumericRestrictionsError.totalDigits(expected: Self.totalDigits, actual: rawValue.size, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -102,7 +102,7 @@ public struct SimpleTypeMacro: ExtensionMacro {
             ret.append(
             """
             if rawValue.count < Self.minLength {
-                throw .restrictionError(error: ListRestrictionError.minLength)
+                throw .restrictionError(error: ListRestrictionError.minLength(expected: Self.minLength, actual: rawValue.count, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -111,7 +111,7 @@ public struct SimpleTypeMacro: ExtensionMacro {
             ret.append(
             """
             if rawValue.count > Self.maxLength {
-                throw .restrictionError(error: ListRestrictionError.maxLength)
+                throw .restrictionError(error: ListRestrictionError.maxLength(expected: Self.maxLength, actual: rawValue.count, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -120,7 +120,7 @@ public struct SimpleTypeMacro: ExtensionMacro {
             ret.append(
             """
             if rawValue.count != Self.length {
-                throw .restrictionError(error: ListRestrictionError.length)
+                throw .restrictionError(error: ListRestrictionError.length(expected: Self.length, actual: rawValue.count, identifier: "\(raw: structDecl.identifier)"))
             }
             """
             )
@@ -144,7 +144,7 @@ public struct SimpleTypeMacro: ExtensionMacro {
             // On supported platforms this check is compiled out
             if #available(iOS 16.0, macOS 13.0, tvOS 16.0, watchOS 9.0, macCatalyst 16.0, visionOS 1.0, *) {
                 if (try? Self.pattern.wholeMatch(in: rawValue)) == nil {
-                    throw .restrictionError(error: StringRestrictionsError.pattern)
+                    throw .restrictionError(error: StringRestrictionsError.pattern(actual: rawValue, identifier: "\(raw: structDecl.identifier)"))
                 }
             }
             """
