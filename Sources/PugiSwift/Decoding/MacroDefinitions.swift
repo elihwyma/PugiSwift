@@ -8,10 +8,10 @@
 import Foundation
  
 @attached(peer)
-public macro Attribute(codingKey: String? = nil) = #externalMacro(module: "PugiSwiftMacros",
+public macro Attribute(codingKey: String? = nil, default: Sendable? = nil) = #externalMacro(module: "PugiSwiftMacros",
                                           type: "AttributeMacro")
 @attached(peer)
-public macro Element(codingKey: String? = nil, childrenCodingKey: String? = nil) = #externalMacro(module: "PugiSwiftMacros",
+public macro Element(codingKey: String? = nil, childrenCodingKey: String? = nil, default: Sendable? = nil) = #externalMacro(module: "PugiSwiftMacros",
                                         type: "ElementMacro")
 
 @attached(extension, conformances: XMLDecodable, names: arbitrary)

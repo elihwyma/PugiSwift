@@ -71,6 +71,7 @@ public struct NodeMacro: ExtensionMacro {
 
         var codingKey = propertyName
         var childrenCodingKey: String? = nil
+        var defaultValue: String? = nil
         var attribute = false
         
         // Get the codingKey
@@ -82,6 +83,9 @@ public struct NodeMacro: ExtensionMacro {
             if let _childCodingKey = expressions.first(where: { $0.label == "childrenCodingKey" }) {
                 childrenCodingKey = _childCodingKey.expr.asStringLiteral!.value!
             }
+            if let _defaultValue = expressions.first(where: { $0.label == "default" }) {
+                defaultValue = _defaultValue.expr._syntax.description
+            }
         }
         if let xmlAttribute {
             attribute = true
@@ -89,11 +93,19 @@ public struct NodeMacro: ExtensionMacro {
             if let _codingKey = expressions.first(where: { $0.label == "codingKey" }) {
                 codingKey = _codingKey.expr.asStringLiteral!.value!
             }
+            if let _defaultValue = expressions.first(where: { $0.label == "default" }) {
+                defaultValue = _defaultValue.expr._syntax.description
+            }
         }
         
         var optional = false
         if case .optional = type {
             optional = true
+        }
+        
+        var optionalReplacement = "nil"
+        if let defaultValue {
+            optionalReplacement = defaultValue
         }
         
         if optional {
@@ -105,11 +117,11 @@ public struct NodeMacro: ExtensionMacro {
                     do {
                         self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
                     } catch {
-                        self.\(raw: propertyName) = nil
+                        self.\(raw: propertyName) = \(raw: optionalReplacement)
                         print("[🐞] Parsing error in \(raw: propertyName): \\(error.localizedDescription)")
                     }
                 } else {
-                    self.\(raw: propertyName) = nil
+                    self.\(raw: propertyName) = \(raw: optionalReplacement)
                 }
                 """
                 )
@@ -117,9 +129,9 @@ public struct NodeMacro: ExtensionMacro {
                 let code = CodeBlockItemSyntax(
                 """
                 if let \(raw: nodeHelperName) = node.attribute(name: "\(raw: codingKey)") {
-                    self.\(raw: propertyName) = try? .init(from: \(raw: nodeHelperName))
+                    self.\(raw: propertyName) = (try? .init(from: \(raw: nodeHelperName))) ?? \(raw: optionalReplacement)
                 } else {
-                    self.\(raw: propertyName) = nil
+                    self.\(raw: propertyName) = \(raw: optionalReplacement)
                 }
                 """
                 )
@@ -158,11 +170,11 @@ public struct NodeMacro: ExtensionMacro {
                         do {
                             self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
                         } catch {
-                            self.\(raw: propertyName) = nil
+                            self.\(raw: propertyName) = \(raw: optionalReplacement)
                             print("[🐞] Parsing error in \(raw: propertyName): \\(error.localizedDescription)")
                         }
                     } else {
-                        self.\(raw: propertyName) = nil
+                        self.\(raw: propertyName) = \(raw: optionalReplacement)
                     }
                     """
                     )
@@ -170,9 +182,9 @@ public struct NodeMacro: ExtensionMacro {
                     let code = CodeBlockItemSyntax(
                     """
                     if let \(raw: nodeHelperName) = node.child(name: "\(raw: codingKey)") {
-                        self.\(raw: propertyName) = try? .init(from: \(raw: nodeHelperName))
+                        self.\(raw: propertyName) = (try? .init(from: \(raw: nodeHelperName))) ?? \(raw: optionalReplacement)
                     } else {
-                        self.\(raw: propertyName) = nil
+                        self.\(raw: propertyName) = \(raw: optionalReplacement)
                     }
                     """
                     )
@@ -202,15 +214,43 @@ public struct NodeMacro: ExtensionMacro {
                 )
                 return [code]
             }
-            let createHelper: CodeBlockItemSyntax
-            if attribute {
-                createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.attribute(name: \"\(raw: codingKey)\") else { throw .attributeNotFound(codingKey: \"\(raw: codingKey)\") }")
-            } else {
-                createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.child(name: \"\(raw: codingKey)\") else { throw .keyNotFound(codingKey: \"\(raw: codingKey)\") }")
-            }
-            let assign = CodeBlockItemSyntax("self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))")
             
-            return [createHelper, assign]
+            if let defaultValue {
+                if attribute {
+                    let codeBlock = CodeBlockItemSyntax(
+                        """
+                        if let \(raw: nodeHelperName) = node.attribute(name: \"\(raw: codingKey)\")  {
+                            self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
+                        } else {
+                            self.\(raw: propertyName) = \(raw: defaultValue)
+                        }
+                        """
+                    )
+                    return [codeBlock]
+                } else {
+                    let codeBlock = CodeBlockItemSyntax(
+                        """
+                        if let \(raw: nodeHelperName) = node.child(name: \"\(raw: codingKey)\") {
+                            self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
+                        } else {
+                            self.\(raw: propertyName) = \(raw: defaultValue)
+                        }
+                        """
+                    )
+                    return [codeBlock]
+                }
+            } else {
+                let createHelper: CodeBlockItemSyntax
+                if attribute {
+                    createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.attribute(name: \"\(raw: codingKey)\") else { throw .attributeNotFound(codingKey: \"\(raw: codingKey)\") }")
+                } else {
+                    createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.child(name: \"\(raw: codingKey)\") else { throw .keyNotFound(codingKey: \"\(raw: codingKey)\") }")
+                }
+                let assign = CodeBlockItemSyntax("self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))")
+                
+                return [createHelper, assign]
+            }
+            
         }
     }
     

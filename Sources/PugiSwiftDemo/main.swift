@@ -46,9 +46,11 @@ import PugiSwift
 }
 
 @Node struct Record {
+    
     let name: String
-    let list: Int?
+    @Element(default: 5) let list: Int
     let color: Colours
+    
 }
 
 @Node struct Records {
