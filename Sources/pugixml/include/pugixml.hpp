@@ -401,6 +401,7 @@ namespace pugi
 
 		// Get attribute name/value, or "" if attribute is empty
 		const char_t* name() const;
+        const char_t* local_name() const;
 		const char_t* value() const;
 
 		// Get attribute value, or the default value if attribute is empty
@@ -515,6 +516,7 @@ namespace pugi
 
 		// Get node name, or "" if node is empty or it has no name
 		const char_t* name() const;
+        const char_t* local_name() const;
 
 		// Get node value, or "" if node is empty or it has no value
 		// Note: For <node>text</node> node.value() does not return "text"! Use child_value() or text() methods to access text inside nodes.
@@ -543,7 +545,9 @@ namespace pugi
 
 		// Get child, attribute or next/previous sibling with the specified name
 		xml_node child(const char_t* name) const;
+        xml_node child_by_local_name(const char* name) const;
 		xml_attribute attribute(const char_t* name) const;
+        xml_attribute attribute_by_local_name(const char* name) const;
 		xml_node next_sibling(const char_t* name) const;
 		xml_node previous_sibling(const char_t* name) const;
 

@@ -5333,6 +5333,21 @@ namespace pugi
 		return name ? name : PUGIXML_TEXT("");
 	}
 
+    PUGI_IMPL_FN const char_t* xml_attribute::local_name() const
+    {
+        if (!_attr) return PUGIXML_TEXT("");
+        const char_t* name = _attr->name;
+        if (name) {
+            const char *colon = strchr(name, ':');
+            if (!colon) {
+                return name;
+            }
+            return colon + 1;
+        } else {
+            return PUGIXML_TEXT("");
+        }
+    }
+
 	PUGI_IMPL_FN const char_t* xml_attribute::value() const
 	{
 		if (!_attr) return PUGIXML_TEXT("");
@@ -5630,6 +5645,21 @@ namespace pugi
 		return name ? name : PUGIXML_TEXT("");
 	}
 
+    PUGI_IMPL_FN const char_t* xml_node::local_name() const
+    {
+        if (!_root) return PUGIXML_TEXT("");
+        const char_t* name = _root->name;
+        if (name) {
+            const char *colon = strchr(name, ':');
+            if (!colon) {
+                return name;
+            }
+            return colon + 1;
+        } else {
+            return PUGIXML_TEXT("");
+        }
+    }
+
 	PUGI_IMPL_FN xml_node_type xml_node::type() const
 	{
 		return _root ? PUGI_IMPL_NODETYPE(_root) : node_null;
@@ -5656,6 +5686,24 @@ namespace pugi
 		return xml_node();
 	}
 
+    PUGI_IMPL_FN xml_node xml_node::child_by_local_name(const char_t* name_) const
+    {
+        if (!_root) return xml_node();
+
+        for (xml_node_struct* i = _root->first_child; i; i = i->next_sibling)
+        {
+            const char_t* iname = i->name;
+            if (iname && impl::strequal(name_, iname))
+                return xml_node(i);
+            
+            const char *colon = strchr(iname, ':');
+            if (colon && strcmp(colon + 1, name_) == 0)
+                return xml_node(i);
+        }
+
+        return xml_node();
+    }
+
 	PUGI_IMPL_FN xml_attribute xml_node::attribute(const char_t* name_) const
 	{
 		if (!_root) return xml_attribute();
@@ -5669,6 +5717,24 @@ namespace pugi
 
 		return xml_attribute();
 	}
+
+    PUGI_IMPL_FN xml_attribute xml_node::attribute_by_local_name(const char_t* name_) const
+    {
+        if (!_root) return xml_attribute();
+
+        for (xml_attribute_struct* i = _root->first_attribute; i; i = i->next_attribute)
+        {
+            const char_t* iname = i->name;
+            if (iname && impl::strequal(name_, iname))
+                return xml_attribute(i);
+            
+            const char *colon = strchr(iname, ':');
+            if (colon && strcmp(colon + 1, name_) == 0)
+                return xml_attribute(i);
+        }
+
+        return xml_attribute();
+    }
 
 	PUGI_IMPL_FN xml_node xml_node::next_sibling(const char_t* name_) const
 	{

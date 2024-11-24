@@ -77,7 +77,7 @@ extension _XMLNodeProtocol {
     }
     
     public var name: String? {
-        let ptr = node.name()!
+        let ptr = node.local_name()!
         let str = String(cString: ptr)
         if str.isEmpty {
             return nil
@@ -165,7 +165,7 @@ extension _XMLNodeProtocol {
     }
     
     public func child(name: String) -> XMLNode? {
-        let ptr = node.child(name)
+        let ptr = node.child_by_local_name(name)
         if ptr.empty() {
             return nil
         }
@@ -173,7 +173,7 @@ extension _XMLNodeProtocol {
     }
     
     public func attribute(name: String) -> XMLAttribute? {
-        let ptr = node.attribute(name)
+        let ptr = node.attribute_by_local_name(name)
         if ptr.empty() {
             return nil
         }

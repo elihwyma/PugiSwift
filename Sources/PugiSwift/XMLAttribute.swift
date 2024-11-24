@@ -17,7 +17,7 @@ public struct XMLAttribute: Sendable, AttributeProtocol {
     }
     
     public var name: String? {
-        let ptr = attribute.name()!
+        let ptr = attribute.local_name()!
         let str = String(cString: ptr)
         if str.isEmpty {
             return nil
