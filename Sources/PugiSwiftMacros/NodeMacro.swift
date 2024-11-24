@@ -98,6 +98,22 @@ public struct NodeMacro: ExtensionMacro {
         
         if optional {
             if attribute {
+                #if DEBUG
+                let code = CodeBlockItemSyntax(
+                """
+                if let \(raw: nodeHelperName) = node.attribute(name: "\(raw: codingKey)") {
+                    do {
+                        self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
+                    } catch {
+                        self.\(raw: propertyName) = nil
+                        print("[🐞] Parsing error in \(raw: propertyName): \\(error.localizedDescription)")
+                    }
+                } else {
+                    self.\(raw: propertyName) = nil
+                }
+                """
+                )
+                #else
                 let code = CodeBlockItemSyntax(
                 """
                 if let \(raw: nodeHelperName) = node.attribute(name: "\(raw: codingKey)") {
@@ -107,6 +123,7 @@ public struct NodeMacro: ExtensionMacro {
                 }
                 """
                 )
+                #endif
                 return [code]
             } else {
                 if let childrenCodingKey {
@@ -134,6 +151,22 @@ public struct NodeMacro: ExtensionMacro {
                     )
                     return [code]
                 } else {
+                    #if DEBUG
+                    let code = CodeBlockItemSyntax(
+                    """
+                    if let \(raw: nodeHelperName) = node.child(name: "\(raw: codingKey)") {
+                        do {
+                            self.\(raw: propertyName) = try .init(from: \(raw: nodeHelperName))
+                        } catch {
+                            self.\(raw: propertyName) = nil
+                            print("[🐞] Parsing error in \(raw: propertyName): \\(error.localizedDescription)")
+                        }
+                    } else {
+                        self.\(raw: propertyName) = nil
+                    }
+                    """
+                    )
+                    #else
                     let code = CodeBlockItemSyntax(
                     """
                     if let \(raw: nodeHelperName) = node.child(name: "\(raw: codingKey)") {
@@ -143,6 +176,7 @@ public struct NodeMacro: ExtensionMacro {
                     }
                     """
                     )
+                    #endif
                     return [code]
                 }
             }
