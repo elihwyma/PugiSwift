@@ -40,10 +40,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
-                .swiftLanguageMode(.v6),
-                .unsafeFlags([
-                    "-Xcc", "-std=c++20"
-                ])
+                .swiftLanguageMode(.v6)
             ]
         ),
         .executableTarget(
@@ -53,10 +50,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
-                .swiftLanguageMode(.v6),
-                .unsafeFlags([
-                    "-Xcc", "-std=c++20"
-                ])
+                .swiftLanguageMode(.v6)
             ]
         ),
         .target(
@@ -67,10 +61,7 @@ let package = Package(
             ],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
-                .swiftLanguageMode(.v6),
-                .unsafeFlags([
-                    "-Xcc", "-std=c++20"
-                ])
+                .swiftLanguageMode(.v6)
             ]),
         .target(
             name: "pugixml"),
@@ -87,10 +78,7 @@ let package = Package(
             dependencies: ["PugiSwift"],
             swiftSettings: [
                 .interoperabilityMode(.Cxx),
-                .swiftLanguageMode(.v6),
-                .unsafeFlags([
-                    "-Xcc", "-std=c++20"
-                ])
+                .swiftLanguageMode(.v6)
             ]
         )
     ]
