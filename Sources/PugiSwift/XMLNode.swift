@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import pugixml
+@preconcurrency import pugixml
 
 public struct XMLNode: Sendable {
     

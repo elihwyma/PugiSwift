@@ -42,6 +42,6 @@ public final actor XMLDocument {
   
 }
 
-extension XMLDocument: _XMLNodeProtocol {
+extension XMLDocument: @preconcurrency _XMLNodeProtocol {
     
 }
