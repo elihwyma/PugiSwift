@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import pugixml
+import pugixml
 
 public struct XMLText: Sendable, AttributeProtocol {
     
@@ -44,5 +44,9 @@ public struct XMLText: Sendable, AttributeProtocol {
     public func as_bool(def: Bool = false) -> Bool {
         text.as_bool(def)
     }
+    
+}
+
+extension pugi.xml_text: @unchecked Sendable {
     
 }

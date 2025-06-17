@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import pugixml
+import pugixml
 
 public struct XMLAttribute: Sendable, AttributeProtocol {
     
@@ -111,5 +111,9 @@ public struct XMLAttribute: Sendable, AttributeProtocol {
     @discardableResult public mutating func set(value: String) -> Bool {
         attribute.set_value(value)
     }
+    
+}
+
+extension pugi.xml_attribute: @unchecked Sendable {
     
 }

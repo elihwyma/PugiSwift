@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@preconcurrency import pugixml
+import pugixml
 
 public struct XMLNode: Sendable {
     
@@ -76,5 +76,9 @@ extension XMLNode: _XMLNodeProtocol {
 
 extension XMLNode: _XMLModifiableProtocol {
     
+    
+}
+
+extension pugi.xml_node: @unchecked Sendable {
     
 }
