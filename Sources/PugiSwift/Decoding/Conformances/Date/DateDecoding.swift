@@ -9,7 +9,7 @@ import Foundation
 
 public protocol DateType {
     
-    static var dateFormatter: ISO8601DateFormatter { get }
+    static var dateFormatters: [ISO8601DateFormatter] { get }
     
 }
 
@@ -21,12 +21,12 @@ public protocol _FullDate: DateType {
 
 extension _FullDate {
     
-    public static var dateFormatter: ISO8601DateFormatter {
+    public static var dateFormatters: [ISO8601DateFormatter] {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [
             .withFullDate
         ]
-        return formatter
+        return [formatter]
     }
     
 }
@@ -39,13 +39,13 @@ public protocol _DateWithTimeZone: DateType {
 
 extension _DateWithTimeZone {
     
-    public static var dateFormatter: ISO8601DateFormatter {
+    public static var dateFormatters: [ISO8601DateFormatter] {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [
             .withFullDate,
             .withTimeZone
         ]
-        return formatter
+        return [formatter]
     }
     
 }
@@ -58,13 +58,13 @@ public protocol _DateWithTime: DateType {
 
 extension _DateWithTime {
     
-    public static var dateFormatter: ISO8601DateFormatter {
+    public static var dateFormatters: [ISO8601DateFormatter] {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [
             .withFullDate,
             .withFullTime
         ]
-        return formatter
+        return [formatter]
     }
     
 }
@@ -77,12 +77,12 @@ public protocol _Time: DateType {
 
 extension _Time {
     
-    public static var dateFormatter: ISO8601DateFormatter {
+    public static var dateFormatters: [ISO8601DateFormatter] {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [
             .withTime
         ]
-        return formatter
+        return [formatter]
     }
     
 }
@@ -95,8 +95,8 @@ public protocol _FullDateWithTimeZone: DateType {
 
 extension _FullDateWithTimeZone {
     
-    public static var dateFormatter: ISO8601DateFormatter {
-        ISO8601DateFormatter()
+    public static var dateFormatters: [ISO8601DateFormatter] {
+        [ISO8601DateFormatter()]
     }
     
 }

@@ -16,10 +16,13 @@ public struct XMLDate<T: DateType>: XMLDecodable {
             throw .noValueFound
         }
         let str = attribute.as_string(def: "")
-        guard let date = T.dateFormatter.date(from: str) else {
-            throw .failedToParse(date: str)
+        for formatter in T.dateFormatters {
+            if let date = formatter.date(from: str) {
+                self.rawValue = date
+                return
+            }
         }
-        self.rawValue = date
+        throw .failedToParse(date: str)
     }
     
 }
