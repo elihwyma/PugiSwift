@@ -65,7 +65,25 @@ public struct XMLNode: Sendable {
         .init(node: self)
     }
     
-    
+    public func attribute(name: String, caseSensitive: Bool = true) -> XMLAttribute? {
+        if caseSensitive {
+            let ptr = node.attribute_by_local_name(name)
+            if ptr.empty() {
+                return nil
+            }
+            return .init(attribute: ptr)
+        } else {
+            for attr in self.iterateAttributes() {
+                if attr.name?.caseInsensitiveCompare(name) == .orderedSame {
+                    if attr.empty {
+                        return nil
+                    }
+                    return attr
+                }
+            }
+            return nil
+        }
+    }
  
 }
 

@@ -73,6 +73,7 @@ public struct NodeMacro: ExtensionMacro {
         var childrenCodingKey: String? = nil
         var defaultValue: String? = nil
         var attribute = false
+        var caseSensitive = true
         
         // Get the codingKey
         if let xmlProperty {
@@ -95,6 +96,9 @@ public struct NodeMacro: ExtensionMacro {
             }
             if let _defaultValue = expressions.first(where: { $0.label == "default" }) {
                 defaultValue = _defaultValue.expr._syntax.description
+            }
+            if let _caseSensitive = expressions.first(where: { $0.label == "caseSensitive" }) {
+                caseSensitive = _caseSensitive.expr.asBooleanLiteral?.value ?? true
             }
         }
         
@@ -128,7 +132,7 @@ public struct NodeMacro: ExtensionMacro {
                 #else
                 let code = CodeBlockItemSyntax(
                 """
-                if let \(raw: nodeHelperName) = node.attribute(name: "\(raw: codingKey)") {
+                if let \(raw: nodeHelperName) = node.attribute(name: "\(raw: codingKey)", caseSensitive: \(raw: caseSensitive)) {
                     self.\(raw: propertyName) = (try? .init(from: \(raw: nodeHelperName))) ?? \(raw: optionalReplacement)
                 } else {
                     self.\(raw: propertyName) = \(raw: optionalReplacement)
@@ -242,7 +246,7 @@ public struct NodeMacro: ExtensionMacro {
             } else {
                 let createHelper: CodeBlockItemSyntax
                 if attribute {
-                    createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.attribute(name: \"\(raw: codingKey)\") else { throw .attributeNotFound(codingKey: \"\(raw: codingKey)\") }")
+                    createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.attribute(name: \"\(raw: codingKey)\", caseSensitive: \(raw: caseSensitive)) else { throw .attributeNotFound(codingKey: \"\(raw: codingKey)\") }")
                 } else {
                     createHelper = CodeBlockItemSyntax("guard let \(raw: nodeHelperName) = node.child(name: \"\(raw: codingKey)\") else { throw .keyNotFound(codingKey: \"\(raw: codingKey)\") }")
                 }
