@@ -11,7 +11,7 @@ import Foundation
 public macro Attribute(codingKey: String? = nil, default: Sendable? = nil, caseSensitive: Bool = true) = #externalMacro(module: "PugiSwiftMacros",
                                           type: "AttributeMacro")
 @attached(peer)
-public macro Element(codingKey: String? = nil, childrenCodingKey: String? = nil, default: Sendable? = nil) = #externalMacro(module: "PugiSwiftMacros",
+public macro Element(codingKey: String? = nil, childrenCodingKey: String? = nil, possibleCodingKey: [XMLDecodable.Type]? = nil, default: Sendable? = nil) = #externalMacro(module: "PugiSwiftMacros",
                                         type: "ElementMacro")
 
 @attached(extension, conformances: XMLDecodable, names: arbitrary)

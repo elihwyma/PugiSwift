@@ -72,6 +72,8 @@ public struct NodeMacro: ExtensionMacro {
         var codingKey = propertyName
         var childrenCodingKey: String? = nil
         var defaultValue: String? = nil
+        var possibleKeys: [String]? = nil
+        var possibleKeysOrig: String?
         var attribute = false
         var caseSensitive = true
         
@@ -86,6 +88,18 @@ public struct NodeMacro: ExtensionMacro {
             }
             if let _defaultValue = expressions.first(where: { $0.label == "default" }) {
                 defaultValue = _defaultValue.expr._syntax.description
+            }
+            if let _possibleKeys = expressions.first(where: { $0.label == "possibleCodingKey" }) {
+                var possKeys = _possibleKeys.expr._syntax.description
+                possibleKeysOrig = possKeys
+                possKeys.removeFirst()
+                possKeys.removeLast()
+                let split = possKeys.split(separator: ",").map { orig -> String in
+                    let first = orig.replacingOccurrences(of: " ", with: "")
+                    let sec = first.replacingOccurrences(of: ".self", with: "")
+                    return sec
+                }
+                possibleKeys = split
             }
         }
         if let xmlAttribute {
@@ -214,6 +228,26 @@ public struct NodeMacro: ExtensionMacro {
                     _\(raw: nodeHelperName).append(__\(raw: nodeHelperName))
                 }
                 self.\(raw: propertyName) = _\(raw: nodeHelperName)
+                """
+                )
+                return [code]
+            }
+            if let possibleKeys {
+                let _tempType = type.description
+                    .replacingOccurrences(of: "[", with: "")
+                    .replacingOccurrences(of: "]", with: "")
+                let code = CodeBlockItemSyntax(
+                """
+                var _\(raw: nodeHelperName) = \(raw: type.description)()
+                let __\(raw: nodeHelperName): [\(raw: _tempType).Type] = \(raw: possibleKeysOrig!)
+                let ___\(raw: nodeHelperName): [String] = \(raw: possibleKeys)
+                for child in node.iterateNodes() {
+                    if let index = ___\(raw: nodeHelperName).firstIndex(where: { $0 == child.name } ) {
+                        let val = try __\(raw: nodeHelperName)[index].init(from: child)
+                        _\(raw: nodeHelperName).append(val)
+                    }
+                }
+                self.\(raw: propertyName) =  _\(raw: nodeHelperName)
                 """
                 )
                 return [code]
